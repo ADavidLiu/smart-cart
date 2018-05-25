@@ -1,0 +1,21 @@
+// Margin
+.u-margin {
+    &-bottom {
+        &-big {
+            margin-bottom: 4rem;
+            @include atSmall {
+                margin-bottom: 5rem;
+            }
+        }
+    }
+}
+
+
+// Alignment
+.u-align {
+    &-inline {
+        &-center {
+            text-align: center;
+        }
+    }
+}

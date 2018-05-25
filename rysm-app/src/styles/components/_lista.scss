@@ -1,0 +1,44 @@
+.lista {
+    &__alerta {
+        display: none;
+    }
+    
+    &__item {
+        box-shadow: 0 0 5px rgba(#000, .25);
+        padding: 2rem;
+        @include atSmall {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &-img-wrapper {
+            text-align: center;
+            @include atSmall {
+                text-align: left;
+            }
+        }
+
+        &-copy {
+            @include atSmall {
+                width: 80%;
+            }
+        }
+
+        &:last-child {
+            margin-bottom: 2rem;
+        }
+
+        & + & {
+            margin-top: 2rem;
+        }
+    }
+
+    &__total {
+        padding-bottom: 2rem;
+        @include atSmall {
+            padding-bottom: 0;
+        }
+    }
+}
