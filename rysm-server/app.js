@@ -5,16 +5,9 @@ const http = require("http").Server(app);
 
 // Conexión en tiempo real con el cliente
 const io = require("socket.io")(http);
-const cors = require("cors");
 io.on("connection", socket => {
 	console.log("Se realizó la conexión!");
 });
-const corsOptions = {
-	origin: (origin, callback) => {
-    	callback(null, true);
-	}
-}
-app.use(cors(corsOptions));
 
 // Para trabajar con JSON
 const bodyParser = require("body-parser");
@@ -30,6 +23,7 @@ const nombreDB = "rysm-db";
 // Devuelve la lista de compras actual
 app.get("/lista-de-compras", (req, res) => {
 	consultar("lista-de-compras", datos => {
+		res.set("Access-Control-Allow-Origin", "*");
 		res.send(datos);
 	});
 });
@@ -37,6 +31,7 @@ app.get("/lista-de-compras", (req, res) => {
 // Devuelve los productos en inventario
 app.get("/productos", (req, res) => {
 	consultar("productos", datos => {
+		res.set("Access-Control-Allow-Origin", "*");
 		res.send(datos);
 	});
 });
@@ -121,6 +116,7 @@ const actualizarLista = nuevoProducto => {
 
 								let valorString = listaActual.valorTotal.toString();
 
+								// Para cortar los decimales a sólo 2 caracteres
 								if (valorString.includes(".")) {
 									const parteEntera = valorString.split(".")[0];
 									const parteDecimal = valorString.split(".")[1];
@@ -129,7 +125,7 @@ const actualizarLista = nuevoProducto => {
 									listaActual.valorTotal = parseFloat(valorString);
 								}
 
-								// Actualiza la lista final
+								// Actualiza la lista final en la base de datos
 								collection.replaceOne({}, listaActual);
 								client.close();
 								// Manda la nueva lista al cliente para que se actualice en tiempo real

@@ -73,11 +73,7 @@ class ListaDeCompras extends Component {
     // Cuando el componente se haya cargado en el DOM
     componentDidMount = () => {
         // Conexión en tiempo real con el servidor
-        const socket = socketIOClient("http://localhost:4000", {
-            extraHeaders: {
-                "Access-Control-Allow-Credentials": "omit"
-            }
-        });
+        const socket = socketIOClient(info.urlBaseServer);
         // "Escucha" al evento "nuevo producto" y recibe los datos del nuevo producto escaneado
         socket.on("nuevo producto", nuevaLista => {
             this.refs.beep.play();
@@ -139,7 +135,7 @@ class ListaDeCompras extends Component {
 
         // JSX renderizado
         return(
-            <div className="lista">
+            <div className="col-xs-12 lista">
                 <audio src="alerta.wav" className="lista__alerta" loop ref="alerta"></audio>
                 <audio src="beep.wav" className="lista__alerta" ref="beep"></audio>
                 <div className="col-xs-12 col-sm-6">
