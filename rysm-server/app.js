@@ -36,6 +36,14 @@ app.get("/productos", (req, res) => {
 	});
 });
 
+// Devuelve los mercados anteriores
+app.get("/mercados", (req, res) => {
+	consultar("mercados", datos => {
+		res.set("Access-Control-Allow-Origin", "*");
+		res.send(datos);
+	});
+});
+
 // Actualiza el estado de la lista de compras
 app.post("/lista-de-compras", (req, res) => {
     const nuevoProducto = req.body;

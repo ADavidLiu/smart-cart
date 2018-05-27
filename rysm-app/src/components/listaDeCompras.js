@@ -12,7 +12,8 @@ class ListaDeCompras extends Component {
         // Define el estado inicial
         this.state = {
             lista: [],
-            valorTotal: 0
+            valorTotal: 0,
+            isLoading: true
         }
     }
 
@@ -113,10 +114,11 @@ class ListaDeCompras extends Component {
                     });
                 });
 
-                // Actualiza el estado con la lista de compras actual en la base de datos
+                // Actualiza el estado con la lista de compras actual en la base de datos y elimina el ícono de carga
                 this.setState({
                     lista: listaActual,
-                    valorTotal: valorTotal
+                    valorTotal: valorTotal,
+                    isLoading: false
                 });
             }).catch(err => {
                 console.log(err);
@@ -134,11 +136,13 @@ class ListaDeCompras extends Component {
         });
 
         // JSX renderizado
-        return(
+        return (
             <div className="col-xs-12 lista">
+                <h1 className="u-margin-bottom-big u-align-inline-center"><b>Carrito de compras</b></h1>
                 <audio src="alerta.wav" className="lista__alerta" loop ref="alerta"></audio>
                 <audio src="beep.wav" className="lista__alerta" ref="beep"></audio>
                 <div className="col-xs-12 col-sm-6">
+                    { this.state.isLoading ? <div className="u-align-inline-center"><i className="fas fa-sync fa-spin fa-5x lista__icon"></i></div> : "" }
                     { items }
                 </div>
                 <div className="col-xs-12 col-sm-6">
