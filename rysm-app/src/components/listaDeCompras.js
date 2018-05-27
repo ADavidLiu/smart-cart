@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
+import moment from "moment";
+
 import info from "../info";
 import { cortarDecimales } from "../utils";
 import Item from "./item";
@@ -13,7 +15,8 @@ class ListaDeCompras extends Component {
         this.state = {
             lista: [],
             valorTotal: 0,
-            isLoading: true
+            isLoading: true,
+            isFilled: false
         }
     }
 
@@ -35,7 +38,8 @@ class ListaDeCompras extends Component {
         // Modifica el estado de la lista de compras y genera el cambio visual en la interfaz
         this.setState({
             lista: listaActual,
-            valorTotal: nuevoValorTotal
+            valorTotal: nuevoValorTotal,
+            isFilled: true
         });
     }
 
@@ -68,6 +72,19 @@ class ListaDeCompras extends Component {
         // Actualiza el estado con los productos correspondientes seleccionados
         this.setState({
             lista: listaActual
+        });
+    }
+
+    // Envía un POST al servidor para guardar el estado final de la lista de compras en la base de datos de los mercados
+    terminar = () => {
+        axios.post(info.urlBaseServer + "/terminar", {
+            productos: this.state.lista,
+            valorTotal: this.state.valorTotal,
+            fecha: `${moment().format("MMMM Do YYYY, h:mm:ss a")}`
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
         });
     }
 
@@ -142,7 +159,7 @@ class ListaDeCompras extends Component {
                 <audio src="alerta.wav" className="lista__alerta" loop ref="alerta"></audio>
                 <audio src="beep.wav" className="lista__alerta" ref="beep"></audio>
                 <div className="col-xs-12 col-sm-6">
-                    { this.state.isLoading ? <div className="u-align-inline-center"><i className="fas fa-sync fa-spin fa-5x lista__icon"></i></div> : "" }
+                    { this.state.isLoading ? <div className="u-align-inline-center"><i className="fas fa-sync fa-spin fa-5x lista__icon"></i></div> : <h2 className="u-margin-bottom-med u-align-inline-center">Mi lista</h2> }
                     { items }
                 </div>
                 <div className="col-xs-12 col-sm-6">
@@ -152,6 +169,7 @@ class ListaDeCompras extends Component {
                         <hr/>
                         <h2>Total a pagar: ${cortarDecimales(this.state.valorTotal + this.state.valorTotal * .19)}</h2>
                     </div>
+                    <button className="lista__btn" disabled={this.state.isFilled ? false : true} onClick={this.terminar}>Terminar mercado</button>
                 </div>
             </div>
         );

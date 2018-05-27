@@ -1,6 +1,13 @@
 // Margin
 .u-margin {
     &-bottom {
+        &-med {
+            margin-bottom: 2.5rem;
+            @include atSmall {
+                margin-bottom: 1.875rem;
+            }
+        }
+        
         &-big {
             margin-bottom: 4rem;
             @include atSmall {

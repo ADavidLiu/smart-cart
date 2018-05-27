@@ -41,4 +41,36 @@
             padding-bottom: 0;
         }
     }
+
+    &__btn {
+        appearance: none;
+        padding: 15px 25px;
+        border: 0;
+        background: #f33030;
+        display: block;
+        width: 100%;
+        border-radius: 3px;
+        box-shadow: 0 0 5px rgba(#000, .25);
+        transition: all .25s;
+        color: #fff;
+        font-size: 2rem;
+        margin-top: 6.667rem;
+        @include atSmall {
+            margin-top: 5rem;
+            font-size: 1.5rem;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:active {
+            box-shadow: none;
+        }
+
+        &:disabled {
+            opacity: .25;
+            cursor: not-allowed;
+        }
+    }
 }

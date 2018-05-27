@@ -2,6 +2,8 @@
 // Servidor
 const app = require("express")();
 const http = require("http").Server(app);
+const cors = require("cors");
+app.use(cors());
 
 // Conexión en tiempo real con el cliente
 const io = require("socket.io")(http);
@@ -23,7 +25,6 @@ const nombreDB = "rysm-db";
 // Devuelve la lista de compras actual
 app.get("/lista-de-compras", (req, res) => {
 	consultar("lista-de-compras", datos => {
-		res.set("Access-Control-Allow-Origin", "*");
 		res.send(datos);
 	});
 });
@@ -31,7 +32,6 @@ app.get("/lista-de-compras", (req, res) => {
 // Devuelve los productos en inventario
 app.get("/productos", (req, res) => {
 	consultar("productos", datos => {
-		res.set("Access-Control-Allow-Origin", "*");
 		res.send(datos);
 	});
 });
@@ -39,7 +39,6 @@ app.get("/productos", (req, res) => {
 // Devuelve los mercados anteriores
 app.get("/mercados", (req, res) => {
 	consultar("mercados", datos => {
-		res.set("Access-Control-Allow-Origin", "*");
 		res.send(datos);
 	});
 });
@@ -56,6 +55,14 @@ app.post("/notificacion", (req, res) => {
 	const notificacion = req.body;
 	io.emit("notificacion", notificacion);
 	res.send("La notificación fue recibida");
+});
+
+// Guarda la última lista de compras en la base de datos
+app.post("/terminar", (req, res) => {
+	const nuevoMercado = req.body;
+	io.emit("nuevo mercado", nuevoMercado);
+	almacenarMercado(nuevoMercado);
+	res.send("El mercado fue recibido");
 });
 
 // Inicia el servidor
@@ -83,6 +90,20 @@ const consultar = (coleccion, callback) => {
 		client.close();
 	});
 };
+
+// Guarda un nuevo mercado en la base de datos
+const almacenarMercado = mercado => {
+	MongoClient.connect(urlDB, (err, client) => {
+		assert.equal(null, err);
+
+		const db = client.db(nombreDB);
+		const collection = db.collection("mercados");
+	
+		collection.insertOne(mercado);
+
+		client.close();
+	});
+}
 
 const actualizarLista = nuevoProducto => {
 	MongoClient.connect(urlDB, (err, client) => {

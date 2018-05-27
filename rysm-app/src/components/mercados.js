@@ -26,8 +26,8 @@ class Mercados extends Component {
     }
 
     render() {
-        const mercados = this.state.lista.map(mercado => {
-            return <Mercado productos={mercado.productos} valorTotal={mercado.valorTotal} fecha={mercado.fecha}></Mercado>
+        const mercados = this.state.lista.map((mercado, i) => {
+            return <Mercado key={i} productos={mercado.productos} valorTotal={mercado.valorTotal} fecha={mercado.fecha}></Mercado>
         });
 
         return (
