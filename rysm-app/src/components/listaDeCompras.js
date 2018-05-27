@@ -82,27 +82,25 @@ class ListaDeCompras extends Component {
             valorTotal: this.state.valorTotal,
             fecha: `${moment().format("MMMM Do YYYY, h:mm:ss a")}`
         }).then(res => {
-            console.log(res);
+            // Reinicia el estado
+            this.setState({
+                lista: [],
+                valorTotal: 0,
+                isLoading: true,
+                isFilled: false
+            });
+            // Dar tiempo para que el servidor reinicie la lista en la base de datos
+            const timeout = setTimeout(() => {
+                this.cargar();
+                clearTimeout(timeout);
+            }, 5000);
         }).catch(err => {
             console.log(err);
         });
     }
 
-    // Cuando el componente se haya cargado en el DOM
-    componentDidMount = () => {
-        // Conexión en tiempo real con el servidor
-        const socket = socketIOClient(info.urlBaseServer);
-        // "Escucha" al evento "nuevo producto" y recibe los datos del nuevo producto escaneado
-        socket.on("nuevo producto", nuevaLista => {
-            this.refs.beep.play();
-            this.actualizarLista(nuevaLista);
-        });
-        // "Escucha" el evento "notificacion" y ejecuta la función correspondiente
-        socket.on("notificacion", notificacion => {
-            const seccionNotificada = notificacion.seccion;
-            this.notificarSeccion(seccionNotificada);
-        });
-
+    // Llena el estado con la información de la lista en la base de datos
+    cargar = () => {
         // Obtiene los valores e información iniciales de la lista de compras en la base de datos
         let listaActual = [];
         let valorTotal = 0;
@@ -143,6 +141,24 @@ class ListaDeCompras extends Component {
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    // Cuando el componente se haya cargado en el DOM
+    componentDidMount = () => {
+        // Conexión en tiempo real con el servidor
+        const socket = socketIOClient(info.urlBaseServer);
+        // "Escucha" al evento "nuevo producto" y recibe los datos del nuevo producto escaneado
+        socket.on("nuevo producto", nuevaLista => {
+            this.refs.beep.play();
+            this.actualizarLista(nuevaLista);
+        });
+        // "Escucha" el evento "notificacion" y ejecuta la función correspondiente
+        socket.on("notificacion", notificacion => {
+            const seccionNotificada = notificacion.seccion;
+            this.notificarSeccion(seccionNotificada);
+        });
+
+        this.cargar();
     }
 
     // Renderiza los componentes en el DOM

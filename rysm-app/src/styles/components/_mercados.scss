@@ -1,3 +1,77 @@
 .mercados {
-    
+    &__list {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 5rem;
+
+        &-item {
+            &-info {
+                box-shadow: 0 0 5px rgba(#000, .25);
+                text-align: center;
+                margin-bottom: 2.667rem;
+                @include atSmall {
+                    margin-bottom: 2rem;
+                    display: flex;
+                    align-items: stretch;
+                    justify-content: space-between;
+                }
+            }
+
+            &-date,
+            &-total {
+                padding: 2rem;
+                margin: 0;
+                @include atSmall {
+                    padding: 1.5rem;
+                    width: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 0;
+                }
+            }
+
+            &-total {
+                border-top: 1px solid #d4d4d4;
+                margin-top: 2rem;
+                @include atSmall {
+                    margin-top: 0;
+                    border-top: 0;
+                    border-left: 1px solid #d4d4d4;
+                }
+            }
+
+            &-products {
+                @include atSmall {
+                    display: flex;
+                    align-items: stretch;
+                    justify-content: space-between;
+                    min-height: 100%;
+                }
+
+                .lista {
+                    &__item {
+                        @include atSmall {
+                            width: 50%;
+                            height: 100%;
+                            align-self: stretch;
+                        }
+
+                        & + .lista__item {
+                            @include atSmall {
+                                margin: 0;
+                                margin-left: 2rem;
+                            }
+                        }
+                    }
+                }
+            }
+
+            & + & {
+                margin-top: 4rem;
+                padding-top: 4rem;
+                border-top: 1px solid #d4d4d4;
+            }
+        }
+    }
 }

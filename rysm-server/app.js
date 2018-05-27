@@ -60,7 +60,6 @@ app.post("/notificacion", (req, res) => {
 // Guarda la última lista de compras en la base de datos
 app.post("/terminar", (req, res) => {
 	const nuevoMercado = req.body;
-	io.emit("nuevo mercado", nuevoMercado);
 	almacenarMercado(nuevoMercado);
 	res.send("El mercado fue recibido");
 });
@@ -100,6 +99,7 @@ const almacenarMercado = mercado => {
 		const collection = db.collection("mercados");
 	
 		collection.insertOne(mercado);
+		reiniciarLista();
 
 		client.close();
 	});
