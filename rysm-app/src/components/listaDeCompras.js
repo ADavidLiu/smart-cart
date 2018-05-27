@@ -51,7 +51,11 @@ class ListaDeCompras extends Component {
                 producto.isHighlighted = true;
 
                 // Reproduce el sonido
-                this.refs.alerta.play();
+                try {
+                    this.refs.alerta.play();
+                } catch(err) {
+                    console.log(err);
+                }
                 // Después de 5 segundos, para el sonido y regresa el producto a su estado normal
                 const timeout = setTimeout(() => {
                     this.refs.alerta.pause();
@@ -109,6 +113,7 @@ class ListaDeCompras extends Component {
         axios.get(info.urlBaseServer + "/lista-de-compras").then(res => {
             const listaRecibida = res.data[0].productos;
             valorTotal = res.data[0].valorTotal;
+            let isNowFilled = false;
 
             axios.get(info.urlBaseServer + "/productos").then(res => {
                 const productosInventario = res.data;
@@ -129,11 +134,18 @@ class ListaDeCompras extends Component {
                     });
                 });
 
+                listaActual.map(producto => {
+                    if (producto.cantidad > 0) {
+                        isNowFilled = true;
+                    }
+                });
+
                 // Actualiza el estado con la lista de compras actual en la base de datos y elimina el ícono de carga
                 this.setState({
                     lista: listaActual,
                     valorTotal: valorTotal,
-                    isLoading: false
+                    isLoading: false,
+                    isFilled: isNowFilled
                 });
             }).catch(err => {
                 console.log(err);
@@ -149,7 +161,11 @@ class ListaDeCompras extends Component {
         const socket = socketIOClient(info.urlBaseServer);
         // "Escucha" al evento "nuevo producto" y recibe los datos del nuevo producto escaneado
         socket.on("nuevo producto", nuevaLista => {
-            this.refs.beep.play();
+            try {
+                this.refs.beep.play();
+            } catch(err) {
+                console.log(err);
+            }
             this.actualizarLista(nuevaLista);
         });
         // "Escucha" el evento "notificacion" y ejecuta la función correspondiente

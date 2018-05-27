@@ -5,7 +5,7 @@ const SerialPort = require("serialport");
 const axios = require("axios");
 
 // Lectura del puerto serial
-const puerto = "/dev/cu.usbmodem1411";
+const puerto = "/dev/cu.usbmodem1431";
 const port = new SerialPort(puerto, {
 	baudRate: 9600
 });

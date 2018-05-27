@@ -2,7 +2,6 @@ import React from "react";
 import Item from "./item";
 
 const Mercado = props => {
-    console.log(props);
     const productos = props.productos.map(producto => {
         return <Item key={producto.nombre} imagen={producto.imagen} nombre={producto.nombre} precioUnitario={producto.precioUnitario} cantidad={producto.cantidad} medida={producto.medida} isHighlighted={false}></Item>
     });
