@@ -47,6 +47,10 @@ port.on("data", data => {
             enviarDatos("notificacion", {
                 seccion: "FRUTAS"
             });
+        } else if (id === "9696907723") {
+            enviarDatos("notificacion", {
+                seccion: "PASTAS"
+            });
         } else {
             // Envía los datos al servidor
             enviarDatos("lista-de-compras", producto);

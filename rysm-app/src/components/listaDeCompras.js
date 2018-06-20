@@ -58,8 +58,12 @@ class ListaDeCompras extends Component {
                 }
                 // Después de 5 segundos, para el sonido y regresa el producto a su estado normal
                 const timeout = setTimeout(() => {
-                    this.refs.alerta.pause();
-                    this.refs.alerta.currentTime = 0;
+                    try {
+                        this.refs.alerta.pause();
+                        this.refs.alerta.currentTime = 0;
+                    } catch (err) {
+                        console.log(err);
+                    }
                     producto.isHighlighted = false;
 
                     // Vuelve a actualizar el estado con los productos correspondientes sin estar seleccionados
